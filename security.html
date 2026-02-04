@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>AIKnow-IT</title>
+  <style>
+    body{font-family:system-ui,Arial;margin:0;line-height:1.6;background:#0b0f17;color:#eef2ff}
+    header,main,footer{max-width:980px;margin:0 auto;padding:22px 18px}
+    nav a{color:#8bd0ff;text-decoration:none;margin-right:14px}
+    .card{background:#111a2e;border:1px solid #243155;border-radius:16px;padding:18px;margin:14px 0}
+    .muted{color:#b7c2ff}
+    a{color:#8bd0ff}
+    code{background:#0f1630;padding:2px 6px;border-radius:6px}
+  </style>
+</head>
+<body>
+<header>
+  <h1 style="margin:0 0 10px;">AIKnow-IT</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="product.html">Product</a>
+    <a href="docs.html">Docs</a>
+    <a href="safety.html">Safety</a>
+    <a href="security.html">Security</a>
+    <a href="support.html">Support</a>
+  </nav>
+</header>
+
+<main>
+  <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>AIKnow-IT — Security & Data Handling</title>
+  <style>
+    body{font-family:system-ui,Arial;margin:0;line-height:1.6;background:#0b0f17;color:#eef2ff}
+    header,main,footer{max-width:980px;margin:0 auto;padding:22px 18px}
+    nav a{color:#8bd0ff;text-decoration:none;margin-right:14px}
+    .card{background:#111a2e;border:1px solid #243155;border-radius:16px;padding:18px;margin:14px 0}
+    .muted{color:#b7c2ff}
+    a{color:#8bd0ff}
+    code{background:#0f1630;padding:2px 6px;border-radius:6px}
+  </style>
+</head>
+<body>
+<header>
+  <h1 style="margin:0 0 10px;">AIKnow-IT</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="product.html">Product</a>
+    <a href="docs.html">Docs</a>
+    <a href="safety.html">Safety</a>
+    <a href="security.html">Security</a>
+    <a href="support.html">Support</a>
+  </nav>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Security & data handling</h2>
+    <p class="muted">
+      This page explains what data AIKnow-IT processes, why we need it, and how users can revoke access.
+      We follow a “minimum data” approach.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Data we process</h2>
+    <ul>
+      <li><b>TikTok OAuth tokens:</b> access tokens (short-lived) and refresh tokens (to obtain new access tokens).</li>
+      <li><b>Posting metadata:</b> caption/title, privacy settings, and basic publishing parameters.</li>
+      <li><b>Operational logs:</b> limited technical logs (status codes, timestamps) for troubleshooting.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Why we process it</h2>
+    <ul>
+      <li>To connect a user’s TikTok account via OAuth (user consent).</li>
+      <li>To publish videos via TikTok Content Posting API (Direct Post).</li>
+      <li>To fetch publishing status and show success/failure information.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Where data is stored</h2>
+    <p>
+      Tokens and workflow configuration are stored in the environment running the automation (e.g., n8n credentials and
+      any connected storage chosen by the user). We do not publish tokens publicly and recommend storing secrets in
+      encrypted credential storage.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Retention</h2>
+    <ul>
+      <li><b>Tokens:</b> stored as long as the user keeps the integration connected.</li>
+      <li><b>Logs:</b> kept for a limited period (e.g., up to 30 days) to debug failures.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Revoking access</h2>
+    <ol>
+      <li>Users can revoke TikTok access in TikTok account settings (connected apps).</li>
+      <li>Users may also request deletion of stored tokens/logs by emailing support.</li>
+    </ol>
+    <p>
+      Support email: <a href="mailto:business.ai.gpt@gmail.com">business.ai.gpt@gmail.com</a>
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Security measures</h2>
+    <ul>
+      <li>HTTPS for all web pages and API calls.</li>
+      <li>Least-privilege scopes (request only what is required, e.g., <code>video.publish</code>).</li>
+      <li>Restricted access to credentials and secrets.</li>
+      <li>Minimized logging of sensitive data (tokens are never intentionally logged).</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="muted">
+  <p>
+    <a href="terms.html">Terms of Service</a> •
+    <a href="privacy.html">Privacy Policy</a>
+  </p>
+</footer>
+</body>
+</html>
+</main>
+
+<footer class="muted">
+  <p>
+    <a href="terms.html">Terms of Service</a> •
+    <a href="privacy.html">Privacy Policy</a>
+  </p>
+</footer>
+</body>
+</html>
