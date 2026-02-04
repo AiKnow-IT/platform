@@ -29,35 +29,67 @@
 
 <main>
   <section class="card">
-  <h2>Documentation</h2>
-  <p class="muted">High-level overview of the TikTok integration.</p>
-</section>
+    <h2>Documentation</h2>
+    <p class="muted">
+      This page describes how AIKnow-IT integrates with TikTok in our n8n-based workflow.
+      The integration enables users to connect their TikTok account and publish short videos via the Content Posting API.
+    </p>
+  </section>
 
-<section class="card">
-  <h2>TikTok end-to-end flow</h2>
-  <ol>
-    <li>OAuth (Login Kit): user grants access.</li>
-    <li>Fetch creator settings: <code>creator_info/query</code> (privacy options).</li>
-    <li>Init publish: <code>/v2/post/publish/video/init</code>.</li>
-    <li>Deliver video: FILE_UPLOAD (upload_url) or PULL_FROM_URL (public MP4 URL).</li>
-    <li>Check result: <code>status/fetch</code> until completed.</li>
-  </ol>
-</section>
+  <section class="card">
+    <h2>End-to-end TikTok flow</h2>
+    <ol>
+      <li><b>User connects TikTok (OAuth / Login):</b> the user authorizes access to their TikTok account.</li>
+      <li><b>Fetch creator settings:</b> we call <code>/v2/post/publish/creator_info/query</code> to retrieve allowed <code>privacy_level</code> options and constraints.</li>
+      <li><b>Prepare the post:</b> we generate a kid-safe caption and hashtags and select a privacy level that is allowed for the account.</li>
+      <li><b>Initialize publishing:</b> we call <code>/v2/post/publish/video/init</code> to create a publish request and receive a <code>publish_id</code>
+        (and an <code>upload_url</code> if using FILE_UPLOAD).</li>
+      <li><b>Deliver the video:</b> one of the following methods is used depending on workflow configuration:
+        <ul>
+          <li><b>PULL_FROM_URL:</b> we provide a public MP4 URL so TikTok can download the video.</li>
+          <li><b>FILE_UPLOAD:</b> we upload the MP4 file to the returned <code>upload_url</code>.</li>
+        </ul>
+      </li>
+      <li><b>Confirm result:</b> we call <code>/v2/post/publish/status/fetch</code> with the <code>publish_id</code> until the status is completed or failed, then we log the outcome for monitoring.</li>
+    </ol>
+  </section>
 
-<section class="card">
-  <h2>Scopes</h2>
-  <ul>
-    <li><code>video.publish</code> — required to publish videos.</li>
-  </ul>
-</section>
+  <section class="card">
+    <h2>Scopes requested</h2>
+    <ul>
+      <li><code>video.publish</code> — required to publish videos via the Content Posting API.</li>
+      <li class="muted">We request only the minimum scopes required for the features demonstrated in the integration.</li>
+    </ul>
+  </section>
 
-<section class="card">
-  <h2>Data handling</h2>
-  <ul>
-    <li>We store OAuth refresh tokens securely to refresh access tokens.</li>
-    <li>We store minimal metadata (caption/privacy) and limited logs for debugging.</li>
-  </ul>
-</section>
+  <section class="card">
+    <h2>What the workflow publishes</h2>
+    <ul>
+      <li>Short, vertical videos (9:16) intended for ages 8–12.</li>
+      <li>Kid-safe themes: friendship, learning, curiosity, humor.</li>
+      <li>No adult content, violence, hate, or harassment (see <a href="safety.html">Safety</a>).</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Data handling (high level)</h2>
+    <ul>
+      <li><b>OAuth tokens:</b> we store refresh tokens securely to refresh access tokens when needed.</li>
+      <li><b>Posting metadata:</b> caption/title, privacy settings, and minimal publish parameters.</li>
+      <li><b>Logs:</b> limited technical logs for troubleshooting (status codes/timestamps). We do not intentionally log tokens.</li>
+    </ul>
+    <p class="muted">
+      More details: <a href="security.html">Security & Data Handling</a>.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Testing and demo video</h2>
+    <p>
+      For app review, we demonstrate the full end-to-end flow in the environment configured in the Developer Portal (sandbox when required).
+      The demo video shows: OAuth consent, init publishing, video delivery (URL or upload), and status confirmation.
+    </p>
+  </section>
 </main>
 
 <footer class="muted">
