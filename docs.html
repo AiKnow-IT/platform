@@ -1,102 +1,139 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>AIKnow-IT</title>
-  <style>
-    body{font-family:system-ui,Arial;margin:0;line-height:1.6;background:#0b0f17;color:#eef2ff}
-    header,main,footer{max-width:980px;margin:0 auto;padding:22px 18px}
-    nav a{color:#8bd0ff;text-decoration:none;margin-right:14px}
-    .card{background:#111a2e;border:1px solid #243155;border-radius:16px;padding:18px;margin:14px 0}
-    .muted{color:#b7c2ff}
-    a{color:#8bd0ff}
-    code{background:#0f1630;padding:2px 6px;border-radius:6px}
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation — AIKnow-IT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <h1 style="margin:0 0 10px;">AIKnow-IT</h1>
+
   <nav>
-    <a href="index.html">Home</a>
-    <a href="product.html">Product</a>
-    <a href="docs.html">Docs</a>
-    <a href="safety.html">Safety</a>
-    <a href="security.html">Security</a>
-    <a href="support.html">Support</a>
+    <div class="nav-inner">
+      <a href="index.html" class="logo"><span class="logo-dot"></span> AIKnow-IT</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="product.html">Product</a></li>
+        <li><a href="docs.html" class="active">Docs</a></li>
+        <li><a href="safety.html">Safety</a></li>
+        <li><a href="security.html">Security</a></li>
+        <li><a href="support.html">Support</a></li>
+        <li><a href="product.html" class="nav-cta">Get Early Access</a></li>
+      </ul>
+    </div>
   </nav>
-</header>
 
-<main>
-  <section class="card">
-    <h2>Documentation</h2>
-    <p class="muted">
-      This page describes how AIKnow-IT integrates with TikTok in our n8n-based workflow.
-      The integration enables users to connect their TikTok account and publish short videos via the Content Posting API.
-    </p>
+  <section class="page-hero">
+    <div class="section-inner centered">
+      <div class="section-label">Documentation</div>
+      <h1 class="section-title">How AIKnow-IT Works</h1>
+      <p class="section-subtitle" style="margin:0.5rem auto 0;">Technical overview of our platform architecture, API integrations, and content pipeline.</p>
+    </div>
   </section>
 
-  <section class="card">
-    <h2>End-to-end TikTok flow</h2>
-    <ol>
-      <li><b>User connects TikTok (OAuth / Login):</b> the user authorizes access to their TikTok account.</li>
-      <li><b>Fetch creator settings:</b> we call <code>/v2/post/publish/creator_info/query</code> to retrieve allowed <code>privacy_level</code> options and constraints.</li>
-      <li><b>Prepare the post:</b> we generate a kid-safe caption and hashtags and select a privacy level that is allowed for the account.</li>
-      <li><b>Initialize publishing:</b> we call <code>/v2/post/publish/video/init</code> to create a publish request and receive a <code>publish_id</code>
-        (and an <code>upload_url</code> if using FILE_UPLOAD).</li>
-      <li><b>Deliver the video:</b> one of the following methods is used depending on workflow configuration:
-        <ul>
-          <li><b>PULL_FROM_URL:</b> we provide a public MP4 URL so TikTok can download the video.</li>
-          <li><b>FILE_UPLOAD:</b> we upload the MP4 file to the returned <code>upload_url</code>.</li>
-        </ul>
-      </li>
-      <li><b>Confirm result:</b> we call <code>/v2/post/publish/status/fetch</code> with the <code>publish_id</code> until the status is completed or failed, then we log the outcome for monitoring.</li>
-    </ol>
+  <section>
+    <div class="section-inner narrow prose">
+
+      <h2>Platform Overview</h2>
+      <p>AIKnow-IT is a cloud-based platform that automates the creation and distribution of kid-safe short-form video content. The platform integrates AI content generation with social media publishing APIs to provide an end-to-end content pipeline for creators and educational publishers.</p>
+
+      <h2>Architecture</h2>
+      <p>The platform consists of the following components:</p>
+      <ul>
+        <li><strong>Content Generation Engine:</strong> Uses OpenAI GPT-4 for script and storyboard generation, and OpenAI Sora for video creation.</li>
+        <li><strong>Content Safety Layer:</strong> A multi-step validation system that checks all generated content against kid-safety guidelines before publishing.</li>
+        <li><strong>Media Storage:</strong> Secure cloud storage (Supabase) for temporary video hosting, with automatic cleanup after publishing.</li>
+        <li><strong>Publishing Engine:</strong> Handles OAuth authentication, video upload, and status tracking across TikTok, YouTube, and Instagram.</li>
+        <li><strong>Notification System:</strong> Email-based alerts for publishing status, errors, and account issues.</li>
+      </ul>
+
+      <h2>Content Generation Pipeline</h2>
+
+      <h3>Step 1: Script Generation</h3>
+      <p>The system sends a prompt to GPT-4 with strict content guidelines and a rotating theme category. The AI generates an original script including characters, scenes, captions, and hashtags. All scripts are validated for required fields and safety compliance.</p>
+
+      <h3>Step 2: Video Generation</h3>
+      <p>The validated script is converted into a Sora video generation prompt. Videos are generated in vertical 9:16 format (720×1280) at 20–25 seconds — optimized for short-form platforms. The system polls for completion with configurable timeout handling.</p>
+
+      <h3>Step 3: Quality Check</h3>
+      <p>Generated videos are stored temporarily and made available for review. The content safety layer performs a final check before the video enters the publishing pipeline.</p>
+
+      <h2>TikTok Integration</h2>
+      <p>Our TikTok integration uses the official TikTok Content Posting API with the following flow:</p>
+
+      <h3>Authentication</h3>
+      <p>Users authorize AIKnow-IT through TikTok's OAuth 2.0 authorization flow. We request the <code>video.publish</code> scope, which grants permission to publish video content on the user's behalf. No other scopes are requested.</p>
+
+      <h3>Publishing Flow</h3>
+      <ol>
+        <li><strong>Initialize post:</strong> We call the Direct Post initialization endpoint with the video URL and metadata (title, description, privacy level).</li>
+        <li><strong>Upload/URL pull:</strong> TikTok fetches the video from our secure public URL.</li>
+        <li><strong>Status tracking:</strong> We poll the publish status until the post is confirmed as live or an error is reported.</li>
+      </ol>
+
+      <h3>Token Management</h3>
+      <p>Access tokens are securely stored and automatically refreshed. If a token expires or is revoked, the user is notified and prompted to re-authorize.</p>
+
+      <h2>YouTube Integration</h2>
+      <p>Videos are uploaded via the YouTube Data API v3 using OAuth 2.0 credentials. Uploads include the video title (with #Shorts tag), description, tags, and category metadata. Videos are set to the appropriate privacy level and made-for-kids designation.</p>
+
+      <h2>Instagram Integration</h2>
+      <p>Instagram Reels are published using the Instagram Graph API in a two-step process:</p>
+      <ol>
+        <li><strong>Create media container:</strong> Initialize the Reel upload with the video URL and caption.</li>
+        <li><strong>Publish:</strong> After processing (typically 15–30 seconds), publish the container to the user's feed.</li>
+      </ol>
+
+      <h2>Content Safety Framework</h2>
+      <p>Every piece of content goes through multiple safety layers:</p>
+      <ul>
+        <li><strong>Prompt-level guardrails:</strong> AI generation prompts include explicit rules against copyrighted content, violence, adult themes, and real people.</li>
+        <li><strong>Output validation:</strong> Generated scripts are parsed and validated for required fields and content policy compliance.</li>
+        <li><strong>Human review option:</strong> Users can review and approve content before publishing.</li>
+        <li><strong>Platform compliance:</strong> All content is designed to comply with the community guidelines of TikTok, YouTube, and Instagram.</li>
+      </ul>
+
+      <h2>Error Handling</h2>
+      <p>The platform includes comprehensive error handling at every stage:</p>
+      <ul>
+        <li>Script generation failures trigger a notification with error details.</li>
+        <li>Video generation timeouts (after ~10 minutes) trigger an alert with the Sora job status.</li>
+        <li>Publishing failures to individual platforms are tracked separately — a failure on one platform does not block publishing to others.</li>
+        <li>All errors are reported to the user via email with actionable details.</li>
+      </ul>
+
+      <h2>Data Flow Summary</h2>
+      <p>The following data flows occur during a typical content generation and publishing cycle:</p>
+      <ol>
+        <li>User preferences and theme → sent to GPT-4 (no personal data included)</li>
+        <li>GPT-4 response → validated and stored as content metadata</li>
+        <li>Sora prompt → sent to OpenAI Sora (no personal data included)</li>
+        <li>Generated video → stored temporarily in Supabase</li>
+        <li>Video URL + metadata → sent to TikTok, YouTube, and Instagram APIs using user's OAuth tokens</li>
+        <li>Publishing status → tracked and reported to user</li>
+        <li>Temporary video storage → cleaned up after 90 days</li>
+      </ol>
+
+    </div>
   </section>
 
-  <section class="card">
-    <h2>Scopes requested</h2>
-    <ul>
-      <li><code>video.publish</code> — required to publish videos via the Content Posting API.</li>
-      <li class="muted">We request only the minimum scopes required for the features demonstrated in the integration.</li>
-    </ul>
-  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><span class="logo-dot"></span> AIKnow-IT</a>
+        <p>AI-powered kid-safe video creation and multi-platform publishing for creators and educational publishers.</p>
+      </div>
+      <div class="footer-col"><h4>Product</h4><a href="product.html">Features</a><a href="docs.html">Documentation</a><a href="safety.html">Safety</a><a href="security.html">Security</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="support.html">Support</a><a href="mailto:business.ai.gpt@gmail.com">Contact</a></div>
+      <div class="footer-col"><h4>Legal</h4><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 AIKnow-IT. All rights reserved.</span>
+      <div class="footer-legal"><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a></div>
+    </div>
+  </footer>
 
-  <section class="card">
-    <h2>What the workflow publishes</h2>
-    <ul>
-      <li>Short, vertical videos (9:16) intended for ages 8–12.</li>
-      <li>Kid-safe themes: friendship, learning, curiosity, humor.</li>
-      <li>No adult content, violence, hate, or harassment (see <a href="safety.html">Safety</a>).</li>
-    </ul>
-  </section>
-
-  <section class="card">
-    <h2>Data handling (high level)</h2>
-    <ul>
-      <li><b>OAuth tokens:</b> we store refresh tokens securely to refresh access tokens when needed.</li>
-      <li><b>Posting metadata:</b> caption/title, privacy settings, and minimal publish parameters.</li>
-      <li><b>Logs:</b> limited technical logs for troubleshooting (status codes/timestamps). We do not intentionally log tokens.</li>
-    </ul>
-    <p class="muted">
-      More details: <a href="security.html">Security & Data Handling</a>.
-    </p>
-  </section>
-
-  <section class="card">
-    <h2>Testing and demo video</h2>
-    <p>
-      For app review, we demonstrate the full end-to-end flow in the environment configured in the Developer Portal (sandbox when required).
-      The demo video shows: OAuth consent, init publishing, video delivery (URL or upload), and status confirmation.
-    </p>
-  </section>
-</main>
-
-<footer class="muted">
-  <p>
-    <a href="terms.html">Terms of Service</a> •
-    <a href="privacy.html">Privacy Policy</a>
-  </p>
-</footer>
 </body>
 </html>
